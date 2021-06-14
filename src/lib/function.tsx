@@ -16,3 +16,12 @@ export const fetchMailData = async () => {
   });
   return mail;
 };
+
+// メールデータの削除（props=id）
+export const deleteMailData = async (id: string) => {
+  try {
+    await db.collection("mail").doc(id).delete();
+  } catch (err) {
+    console.log("Error delete document:", err);
+  }
+};

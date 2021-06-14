@@ -1,14 +1,13 @@
 import { useState, useEffect } from "react";
-import { fetchMailData } from "src/lib/function";
+import { fetchMailData, deleteMailData } from "src/lib/function";
 
 export interface mail {
-    id: string;
-    name: string;
-    mail: string;
-    contents: string;
-    createAt: string;
-  }
-  
+  id: string;
+  name: string;
+  mail: string;
+  contents: string;
+  createAt: string;
+}
 
 export const TableMail = () => {
   const initData: mail[] = [];
@@ -20,6 +19,12 @@ export const TableMail = () => {
     };
     fetchData();
   }, []);
+  const handleOnClick = (id: string, index: number) => {
+    deleteMailData(id);
+    const newMailData = [ ...mailData ]
+    newMailData.splice(index, 1);
+    setMailData(newMailData);
+  };
   return (
     <table className="w-full">
       <thead>
@@ -29,7 +34,7 @@ export const TableMail = () => {
           <th>名前</th>
           <th>メールアドレス</th>
           <th>内容</th>
-          <th>FirestoreID</th>
+          <th>アクション</th>
         </tr>
       </thead>
       <tbody>
@@ -41,7 +46,14 @@ export const TableMail = () => {
               <td>{mail.name}</td>
               <td>{mail.mail}</td>
               <td>{mail.contents}</td>
-              <td>{mail.id}</td>
+              <td>
+                <button
+                  className="p-4 bg-primary hover:bg-secondary text-white font-bold text-xs focus:outline-none rounded-lg"
+                  onClick={() => handleOnClick(mail.id, index)}
+                >
+                  削除
+                </button>
+              </td>
             </tr>
           );
         })}
